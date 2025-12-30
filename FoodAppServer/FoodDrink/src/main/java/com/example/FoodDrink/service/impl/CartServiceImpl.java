@@ -205,10 +205,13 @@ public class CartServiceImpl implements CartService {
 
         cartDTO.setTotalAmount(totalAmount); //set the totalAmount
 
-        //remove the review from the response
+        //remove the review and calculate subtotal from the response
         if (cartDTO.getCartItems() != null) {
             cartDTO.getCartItems()
-                    .forEach(item -> item.getMenu().setReviews(null));
+                    .forEach(item -> {
+                        item.getMenu().setReviews(null);
+                        item.setSubtotal(item.getPricePerUnit().multiply(BigDecimal.valueOf(item.getQuantity())));
+                    });
         }
 
         return Response.<CartDTO>builder()

@@ -14,5 +14,5 @@ public class CartItemDTO {
     private MenuDTO menu;
     private int quantity;
     private BigDecimal pricePerUnit;
-    private BigDecimal subTotal;
+    private BigDecimal subtotal;
 }
