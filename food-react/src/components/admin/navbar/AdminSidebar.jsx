@@ -16,20 +16,13 @@ import {
 const AdminSidebar = () => {
   const location = useLocation();
 
-  const handleToggleSidebar = () => {
-    document.querySelector('.admin-sidebar').classList.toggle('active');
-  };
-
   return (
     <>
       
         <div className="admin-sidebar">
           <div className="sidebar-header">
             <h2>Pannel</h2>
-            {/* add toogle icon here */}
-            <button className='close-sidebar' onClick={handleToggleSidebar}>
-              <FontAwesomeIcon icon={faBars} />
-            </button>
+           
           </div>
 
           <div className="sidebar-nav">

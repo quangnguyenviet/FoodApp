@@ -3437,8 +3437,7 @@ nav {
   position: fixed;
   height: 100vh;
   z-index: 100;
-  transition: all 0.3s ease;
-  transition: transform 0.8s ease;
+  /* transition: all 0.3s ease; */
   transform: translateX(-100%); /* hide sidebar initially by moving it left */
 }
 .active{
