@@ -73,7 +73,6 @@ const ProcessPaymenttPage = () => {
         );
     }
 
-kljljk
     return (
         <div className="checkout-container">
             <ErrorDisplay />
