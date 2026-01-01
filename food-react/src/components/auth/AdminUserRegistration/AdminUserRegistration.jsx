@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ApiService from '../../../services/ApiService';
-import { useError } from '../../common/ErrorDisplay';
+import { useError } from '../../common/ErrorDisplay/ErrorDisplay';
 import styles from './AdminUserRegistration.module.css';
 
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import ApiService from '../../services/ApiService';
-import { useError } from '../common/ErrorDisplay';
+import { useError } from '../common/ErrorDisplay/ErrorDisplay';
 
 
 const LeaveReviewPage = () => {
@@ -42,7 +42,7 @@ const LeaveReviewPage = () => {
             showError("No Menu Item specified")
         }
 
-    }, [menuId]);
+    }, [menuId, showError]);
 
 
 

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ApiService from '../../services/ApiService';
-import { useError } from '../common/ErrorDisplay';
+import { useError } from '../common/ErrorDisplay/ErrorDisplay';
 
 
 
@@ -13,36 +13,35 @@ const AdminPaymentsPage = () => {
     const { ErrorDisplay, showError } = useError();
     const navigate = useNavigate();
 
+    const fetchPayments = useCallback(
+        async () => {
+            try {
+                const response = await ApiService.getAllPayments();
 
+                if (response.statusCode === 200) {
+                    let filteredPayments = response.data;
+
+                    if (filter !== 'all') {
+                        filteredPayments = filteredPayments.filter(p =>
+                            filter === 'completed' ? p.paymentStatus === 'COMPLETED' :
+                                filter === 'pending' ? p.paymentStatus === 'PENDING' :
+                                    filter === 'failed' ? p.paymentStatus === 'FAILED' :
+                                        filteredPayments
+                        );
+                    }
+                    setPayments(filteredPayments);
+                }
+
+            } catch (error) {
+                showError(error.response?.data?.message || error.message);
+
+            }
+        }
+        , [showError, filter]);
 
     useEffect(() => {
         fetchPayments();
-    }, [filter]);
-
-
-    const fetchPayments = async () => {
-        try {
-            const response = await ApiService.getAllPayments();
-
-            if (response.statusCode === 200) {
-                let filteredPayments = response.data;
-
-                if (filter !== 'all') {
-                    filteredPayments = filteredPayments.filter(p =>
-                        filter === 'completed' ? p.paymentStatus === 'COMPLETED' :
-                            filter === 'pending' ? p.paymentStatus === 'PENDING' :
-                                filter === 'failed' ? p.paymentStatus === 'FAILED' :
-                                    filteredPayments
-                    );
-                }
-                setPayments(filteredPayments);
-            }
-
-        } catch (error) {
-            showError(error.response?.data?.message || error.message);
-
-        }
-    }
+    }, [filter, fetchPayments]);
 
 
     const handleViewPayment = (id) => {

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useError } from '../common/ErrorDisplay';
+import { useError } from '../common/ErrorDisplay/ErrorDisplay';
 import Payment from "./Payment";
 
 const ProcessPaymenttPage = () => {

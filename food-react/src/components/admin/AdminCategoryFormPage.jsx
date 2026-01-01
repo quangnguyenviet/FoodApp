@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ApiService from '../../services/ApiService';
-import { useError } from '../common/ErrorDisplay';
+import { useError } from '../common/ErrorDisplay/ErrorDisplay';
 
 
 const AdminCategoryFormPage = () => {
@@ -16,27 +16,28 @@ const AdminCategoryFormPage = () => {
         description: ''
     });
 
+    const fetchCategory = useCallback(
+        async () => {
+
+            try {
+                const response = await ApiService.getCategoryById(id);
+                if (response.statusCode === 200) {
+                    setCategory(response.data);
+                }
+
+            } catch (error) {
+                showError(error.response?.data?.message || error.message);
+
+            }
+        }
+        , [showError, id]);
 
     useEffect(() => {
         if (id) {
             fetchCategory();
         }
 
-    }, [id]);
-
-    const fetchCategory = async () => {
-
-        try {
-            const response = await ApiService.getCategoryById(id);
-            if (response.statusCode === 200) {
-                setCategory(response.data);
-            }
-
-        } catch (error) {
-            showError(error.response?.data?.message || error.message);
-
-        }
-    }
+    }, [id, fetchCategory]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;

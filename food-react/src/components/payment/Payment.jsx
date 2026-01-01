@@ -3,7 +3,7 @@ import { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import ApiService from '../../services/ApiService';
-import { useError } from '../common/ErrorDisplay';
+import { useError } from '../common/ErrorDisplay/ErrorDisplay';
 
 
 // Load Stripe with your publishable key
@@ -70,7 +70,7 @@ const PaymentForm = ({ amount, orderId, onSuccess }) => {
                     transactionId: paymentIntent.id,
                     success: true
                 });
-
+                console.log("Backend payment update response: ", res)
 
                 onSuccess(paymentIntent)
 
@@ -83,7 +83,7 @@ const PaymentForm = ({ amount, orderId, onSuccess }) => {
                     transactionId: paymentIntent.id,
                     success: false
                 });
-
+                console.log("Backend payment update response: ", res)
 
             }
 

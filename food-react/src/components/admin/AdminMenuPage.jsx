@@ -1,56 +1,55 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ApiService from '../../services/ApiService';
-import { useError } from '../common/ErrorDisplay';
+import { useError } from '../common/ErrorDisplay/ErrorDisplay';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 
 const AdminMenuPage = () => {
 
-    const [menus, setMenus] = useState([]);
-    const { ErrorDisplay, showError } = useError();
-    const navigate = useNavigate();
+  const [menus, setMenus] = useState([]);
+  const { ErrorDisplay, showError } = useError();
+  const navigate = useNavigate();
 
-
-    useEffect(() => {
-        fetchMenus();
-
-    }, [])
-
-
-
-    const fetchMenus = async () => {
-        try {
-            const response = await ApiService.getAllMenus();
-            if (response.statusCode === 200) {
-                setMenus(response.data);
-            }
-        } catch (error) {
-            showError(error.response?.data?.message || error.message);
+  const fetchMenus = useCallback(
+    async () => {
+      try {
+        const response = await ApiService.getAllMenus();
+        if (response.statusCode === 200) {
+          setMenus(response.data);
         }
-    };
+      } catch (error) {
+        showError(error.response?.data?.message || error.message);
+      }
+    }
+    , [showError]);
 
-    const handleAddMenuItem = () => {
-        navigate('/admin/menu-items/new');
-    };
+  useEffect(() => {
+    fetchMenus();
 
-    const handleEditMenuItem = (id) => {
-        navigate(`/admin/menu-items/edit/${id}`);
-    };
+  }, [fetchMenus]);
 
-    const handleDeleteMenuItem = async (id) => {
-        if (window.confirm('Are you sure you want to delete this menu item?')) {
-            try {
-                const response = await ApiService.deleteMenu(id);
-                if (response.statusCode === 200) {
-                    fetchMenus();
-                }
-            } catch (error) {
-                showError(error.response?.data?.message || error.message);
-            }
+  const handleAddMenuItem = () => {
+    navigate('/admin/menu-items/new');
+  };
+
+  const handleEditMenuItem = (id) => {
+    navigate(`/admin/menu-items/edit/${id}`);
+  };
+
+  const handleDeleteMenuItem = async (id) => {
+    if (window.confirm('Are you sure you want to delete this menu item?')) {
+      try {
+        const response = await ApiService.deleteMenu(id);
+        if (response.statusCode === 200) {
+          fetchMenus();
         }
-    };
+      } catch (error) {
+        showError(error.response?.data?.message || error.message);
+      }
+    }
+  };
 
 
   return (

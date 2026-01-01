@@ -1,5 +1,5 @@
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import { useError } from "../../common/ErrorDisplay"
+import { useError } from "../../common/ErrorDisplay/ErrorDisplay"
 import { useState } from "react";
 import ApiService from "../../../services/ApiService";
 import styles from "./LoginPage.module.css";

@@ -1,58 +1,59 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ApiService from '../../services/ApiService';
-import { useError } from '../common/ErrorDisplay';
+import { useError } from '../common/ErrorDisplay/ErrorDisplay';
 
 
 
 const AdminCategoriesPage = () => {
 
-    const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
 
-    const { ErrorDisplay, showError } = useError();
-    const navigate = useNavigate();
+  const { ErrorDisplay, showError } = useError();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        fetchCategories();
-    }, []);
-
-    const fetchCategories = async () => {
-        try {
-            const response = await ApiService.getAllCategories();
-            if (response.statusCode === 200) {
-                setCategories(response.data);
-            }
-
-        } catch (error) {
-            showError(error.response?.data?.message || error.message);
-
+  const fetchCategories = useCallback(
+    async () => {
+      try {
+        const response = await ApiService.getAllCategories();
+        if (response.statusCode === 200) {
+          setCategories(response.data);
         }
+
+      } catch (error) {
+        showError(error.response?.data?.message || error.message);
+
+      }
     }
+    , [showError]);
 
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
-    const handleAddCategory = () => {
-        navigate('/admin/categories/new');
-    };
+  const handleAddCategory = () => {
+    navigate('/admin/categories/new');
+  };
 
-    const handleEditCategory = (id) => {
-        navigate(`/admin/categories/edit/${id}`);
-    };
+  const handleEditCategory = (id) => {
+    navigate(`/admin/categories/edit/${id}`);
+  };
 
-    const handleDeleteCategory = async (id) => {
-        if (window.confirm('Are you sure you want to delete this category?')) {
-            try {
-                const response = await ApiService.deleteCategory(id);
-                if (response.statusCode === 200) {
-                    fetchCategories();
-                }
-            } catch (error) {
-                showError(error.response?.data?.message || error.message);
-            }
+  const handleDeleteCategory = async (id) => {
+    if (window.confirm('Are you sure you want to delete this category?')) {
+      try {
+        const response = await ApiService.deleteCategory(id);
+        if (response.statusCode === 200) {
+          fetchCategories();
         }
-    };
+      } catch (error) {
+        showError(error.response?.data?.message || error.message);
+      }
+    }
+  };
 
-    
+
   return (
     <div className="admin-categories">
       <ErrorDisplay />

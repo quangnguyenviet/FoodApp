@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ApiService from '../../services/ApiService';
-import { useError } from '../common/ErrorDisplay'; // import custom error hook
+import { useError } from '../common/ErrorDisplay/ErrorDisplay'; // import custom error hook
 
 
 const MenuDetailsPage = () => {
@@ -36,13 +36,14 @@ const MenuDetailsPage = () => {
                 showError(error.response?.data?.message || error.message);
             }
         };
+        const timeouts = timeoutRef.current;
 
         fetchMenu();
         return () => {
             // Clear all timeouts on unmount
-            timeoutRef.current.forEach(timeout => clearTimeout(timeout));
+            timeouts.forEach(timeout => clearTimeout(timeout));
         };
-    }, [id]);
+    }, [id, showError]);
 
     const handleBackToMenu = () => {
         navigate(-1); // Go back to previous page

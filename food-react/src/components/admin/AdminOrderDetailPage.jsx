@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ApiService from '../../services/ApiService';
-import { useError } from '../common/ErrorDisplay';
+import { useError } from '../common/ErrorDisplay/ErrorDisplay';
 
 
 const AdminOrderDetailPage = () => {
@@ -11,23 +11,22 @@ const AdminOrderDetailPage = () => {
 
     const { ErrorDisplay, showError } = useError();
     const navigate = useNavigate();
-
+    const fetchOrder = useCallback(
+        async () => {
+            try {
+                const response = await ApiService.getOrderById(id);
+                if (response.statusCode === 200) {
+                    setOrder(response.data);
+                }
+            } catch (error) {
+                showError(error.response?.data?.message || error.message);
+            }
+        }
+        , [showError, id]);
 
     useEffect(() => {
         fetchOrder();
-    }, [id]);
-
-
-    const fetchOrder = async () => {
-        try {
-            const response = await ApiService.getOrderById(id);
-            if (response.statusCode === 200) {
-                setOrder(response.data);
-            }
-        } catch (error) {
-            showError(error.response?.data?.message || error.message);
-        }
-    };
+    }, [fetchOrder]);
 
 
 
@@ -46,7 +45,7 @@ const AdminOrderDetailPage = () => {
         }
     };
 
-    
+
 
     if (order) {
 

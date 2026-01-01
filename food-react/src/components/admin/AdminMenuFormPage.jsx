@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ApiService from '../../services/ApiService';
-import { useError } from '../common/ErrorDisplay';
+import { useError } from '../common/ErrorDisplay/ErrorDisplay';
 
 
 const AdminMenuFormPage = () => {
@@ -24,43 +24,45 @@ const AdminMenuFormPage = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    //FETCH ALL CATEGORIES
+    const fetchCategories = useCallback(
+        async () => {
+            try {
+                const response = await ApiService.getAllCategories();
+                if (response.statusCode === 200) {
+                    setCategories(response.data);
+                }
+            } catch (error) {
+                showError(error.response?.data?.message || error.message);
+            }
+        }, [showError]
+    );
+
+
+    //FETCH MENU BY ID WHEN WE ARE USING THIS FORM TO UPDATE A MENU
+    const fetchMenu = useCallback(
+        async () => {
+            try {
+                const response = await ApiService.getMenuById(id);
+                if (response.statusCode === 200) {
+                    setMenu({
+                        ...response.data,
+                        price: response.data.price.toString(),
+                        categoryId: response.data.categoryId.toString()
+                    });
+                }
+            } catch (error) {
+                showError(error.response?.data?.message || error.message);
+            }
+        }
+        , [showError, id]);
 
     useEffect(() => {
         fetchCategories();
         if (id) {
             fetchMenu()
         }
-    }, [id]);
-
-
-    //FETCH ALL CATEGORIES
-    const fetchCategories = async () => {
-        try {
-            const response = await ApiService.getAllCategories();
-            if (response.statusCode === 200) {
-                setCategories(response.data);
-            }
-        } catch (error) {
-            showError(error.response?.data?.message || error.message);
-        }
-    };
-
-
-    //FETCH MENU BY ID WHEN WE ARE USING THIS FORM TO UPDATE A MENU
-    const fetchMenu = async () => {
-        try {
-            const response = await ApiService.getMenuById(id);
-            if (response.statusCode === 200) {
-                setMenu({
-                    ...response.data,
-                    price: response.data.price.toString(),
-                    categoryId: response.data.categoryId.toString()
-                });
-            }
-        } catch (error) {
-            showError(error.response?.data?.message || error.message);
-        }
-    };
+    }, [id, fetchMenu, fetchCategories]);
 
 
     const handleInputChange = (e) => {

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import styles from './ErrorDisplay.module.css';
 
 /**
  * A component that displays error messages with auto-dismiss functionality
@@ -20,12 +21,10 @@ const ErrorDisplay = ({ message, onDismiss }) => {
     if (!message) return null;
 
     return (
-        <div className="error-display">
-            <div className="error-content">
-                {/* Display the error message */}
-                <span className="error-message">{message}</span>
-                {/* Visual progress indicator (for auto-dismiss) */}
-                <div className="error-progress"></div>
+        <div className={styles.wrapper}>
+            <div className={styles.card}>
+                <span className={styles.message}>{message}</span>
+                <div className={styles.progress}></div>
             </div>
         </div>
     );

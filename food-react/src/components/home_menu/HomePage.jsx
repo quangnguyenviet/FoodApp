@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useError } from '../common/ErrorDisplay';
+import { useError } from '../common/ErrorDisplay/ErrorDisplay';
 import ApiService from '../../services/ApiService';
 
 
@@ -28,7 +28,7 @@ const HomePage = () => {
         };
 
         fetchCategories();
-    }, []);
+    }, [showError]);
 
 
     const handleCategoryClick = (categoryId) => {

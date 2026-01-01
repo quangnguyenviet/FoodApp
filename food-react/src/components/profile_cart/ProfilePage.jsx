@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import ApiService from '../../services/ApiService';
 import { useNavigate } from 'react-router-dom';
-import { useError } from '../common/ErrorDisplay';
+import { useError } from '../common/ErrorDisplay/ErrorDisplay';
 
 
 const ProfilePage = () => {
@@ -25,7 +25,7 @@ const ProfilePage = () => {
             }
         }
         fetchUserProfile()
-    }, [])
+    }, [showError]);
 
 
 
