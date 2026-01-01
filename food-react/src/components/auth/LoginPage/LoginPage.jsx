@@ -1,7 +1,8 @@
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import { useError } from "../common/ErrorDisplay"
+import { useError } from "../../common/ErrorDisplay"
 import { useState } from "react";
-import ApiService from "../../services/ApiService";
+import ApiService from "../../../services/ApiService";
+import styles from "./LoginPage.module.css";
 
 const LoginPage = () => {
 
@@ -45,20 +46,20 @@ const LoginPage = () => {
 
 
     return (
-        <div className="login-page-food">
+        <div className={styles.page}>
         {/* Render the ErrorDisplay component */}
         <ErrorDisplay />
-            <div className="login-card-food">
+            <div className={styles.card}>
                 
-                <div className="login-header-food">
-                    <h2 className="login-title-food">Login</h2>
-                    <p className="login-description-food">Login to your account to order delicious food!</p>
+                <div className={styles.header}>
+                    <h2 className={styles.title}>Login</h2>
+                    <p className={styles.description}>Login to your account to order delicious food!</p>
                 </div>
 
-                <div className="login-content-food">
-                    <form className="login-form-food" onSubmit={handleSubmit}>
-                        <div className="login-form-group">
-                            <label htmlFor="email" className="login-label-food">Email</label>
+                <div className={styles.content}>
+                    <form className={styles.form} onSubmit={handleSubmit}>
+                        <div className={styles.formGroup}>
+                            <label htmlFor="email" className={styles.label}>Email</label>
                             <input
                                 id="email"
                                 name="email"
@@ -68,11 +69,11 @@ const LoginPage = () => {
                                 onChange={handleChange}
                                 required
                                 placeholder="Your Email Address"
-                                className="login-input-food"
+                                className={styles.input}
                             />
                         </div>
-                        <div className="login-form-group">
-                            <label htmlFor="password" className="login-label-food">Password</label>
+                        <div className={styles.formGroup}>
+                            <label htmlFor="password" className={styles.label}>Password</label>
                             <input
                                 id="password"
                                 name="password"
@@ -81,34 +82,34 @@ const LoginPage = () => {
                                 onChange={handleChange}
                                 required
                                 placeholder="Password"
-                                className="login-input-food"
+                                className={styles.input}
                             />
                         </div>
 
                         <div>
-                            <button type="submit" className="login-button-food">
+                            <button type="submit" className={styles.button}>
                                 Login
                             </button>
                         </div>
 
 
-                        <div className="already">
-                            <Link to="/register" className="register-link-food">
+                        <div className={styles.registerLink}>
+                            <Link to="/register" className={styles.link}>
                                 Don't Have an Account? Register
                             </Link>
                         </div>
                     </form>
 
-                    <div className="login-social-food">
-                        <div className="login-separator-food">
-                            <span className="login-separator-text-food">Or continue with</span>
+                    <div>
+                        <div className={styles.separator}>
+                            <span className={styles.separatorText}>Or continue with</span>
                         </div>
 
-                        <div className="login-social-buttons-food">
+                        <div className={styles.socialButtons}>
                             {/* Add social login buttons here (e.g., Google, Facebook, GitHub) */}
-                            <button className="login-social-button-food login-social-google-food">Google</button>
-                            <button className="login-social-button-food login-social-facebook-food">Facebook</button>
-                            <button className="login-social-button-food login-social-github-food">Github</button>
+                            <button className={`${styles.socialButton} ${styles.google}`}>Google</button>
+                            <button className={`${styles.socialButton} ${styles.facebook}`}>Facebook</button>
+                            <button className={`${styles.socialButton} ${styles.github}`}>Github</button>
                         </div>
                     </div>
                 </div>
