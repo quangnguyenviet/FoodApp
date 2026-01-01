@@ -24,7 +24,7 @@ import AdminOrderDetailPage from "./components/admin/AdminOrderDetailPage";
 import AdminPaymentsPage from "./components/admin/AdminPaymentsPage";
 import AdminPaymentDetailPage from "./components/admin/AdminPaymentDetailPage";
 import AdminDashboardPage from "./components/admin/AdminDashboardPage";
-import AdminUserRegistration from "./components/auth/AdminUserRegistration";
+import AdminUserRegistration from "./components/auth/AdminUserRegistration/AdminUserRegistration";
 
 function App() {
   return (

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ApiService from '../../services/ApiService';
-import { useError } from '../common/ErrorDisplay';
+import ApiService from '../../../services/ApiService';
+import { useError } from '../../common/ErrorDisplay';
+import styles from './AdminUserRegistration.module.css';
 
 
 const AdminUserRegistration = () => {
@@ -71,17 +72,17 @@ const AdminUserRegistration = () => {
     };
 
     return (
-        <div className="admin-register-page">
-            <div className="admin-register-card">
-                <div className="admin-register-header">
-                    <h2 className="admin-register-title">Register New User</h2>
-                    <p className="admin-register-description">Create a new user account with specific roles</p>
+        <div className={styles.page}>
+            <div className={styles.card}>
+                <div className={styles.header}>
+                    <h2 className={styles.title}>Register New User</h2>
+                    <p className={styles.description}>Create a new user account with specific roles</p>
                 </div>
 
-                <div className="admin-register-content">
-                    <form className="admin-register-form" onSubmit={handleSubmit}>
-                        <div className="admin-form-group">
-                            <label className="admin-label">Full Name</label>
+                <div className={styles.content}>
+                    <form onSubmit={handleSubmit}>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Full Name</label>
                             <input
                                 name="name"
                                 type="text"
@@ -89,12 +90,12 @@ const AdminUserRegistration = () => {
                                 onChange={handleChange}
                                 required
                                 placeholder="User's full name"
-                                className="admin-input"
+                                className={styles.input}
                             />
                         </div>
 
-                        <div className="admin-form-group">
-                            <label className="admin-label">Email</label>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Email</label>
                             <input
                                 name="email"
                                 type="email"
@@ -102,12 +103,12 @@ const AdminUserRegistration = () => {
                                 onChange={handleChange}
                                 required
                                 placeholder="User's email"
-                                className="admin-input"
+                                className={styles.input}
                             />
                         </div>
 
-                        <div className="admin-form-group">
-                            <label className="admin-label">Password</label>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Password</label>
                             <input
                                 name="password"
                                 type="password"
@@ -115,12 +116,12 @@ const AdminUserRegistration = () => {
                                 onChange={handleChange}
                                 required
                                 placeholder="Create password"
-                                className="admin-input"
+                                className={styles.input}
                             />
                         </div>
 
-                        <div className="admin-form-group">
-                            <label className="admin-label">Phone Number</label>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Phone Number</label>
                             <input
                                 name="phoneNumber"
                                 type="text"
@@ -128,12 +129,12 @@ const AdminUserRegistration = () => {
                                 onChange={handleChange}
                                 required
                                 placeholder="Phone number"
-                                className="admin-input"
+                                className={styles.input}
                             />
                         </div>
 
-                        <div className="admin-form-group">
-                            <label className="admin-label">Address</label>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Address</label>
                             <input
                                 name="address"
                                 type="text"
@@ -141,24 +142,24 @@ const AdminUserRegistration = () => {
                                 onChange={handleChange}
                                 required
                                 placeholder="Full address"
-                                className="admin-input"
+                                className={styles.input}
                             />
                         </div>
 
-                        <div className="admin-form-group">
-                            <label className="admin-label">Roles</label>
-                            <div className="admin-roles-container">
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Roles</label>
+                            <div className={styles.roles}>
                                 {availableRoles.map(role => (
                                     <div 
                                         key={role.value} 
-                                        className={`admin-role-checkbox ${formData.roles.includes(role.value) ? 'selected' : ''}`}
+                                        className={`${styles.role} ${formData.roles.includes(role.value) ? styles.roleSelected : ''}`}
                                         onClick={() => handleRoleChange(role.value)}
                                     >
                                         <input
                                             type="checkbox"
                                             checked={formData.roles.includes(role.value)}
                                             readOnly
-                                            className="admin-role-input"
+                                            className={styles.roleInput}
                                         />
                                         <span>{role.label}</span>
                                     </div>
@@ -168,7 +169,7 @@ const AdminUserRegistration = () => {
 
                         <ErrorDisplay />
 
-                        <button type="submit" className="admin-register-button">
+                        <button type="submit" className={styles.submit}>
                             Register User
                         </button>
                     </form>
