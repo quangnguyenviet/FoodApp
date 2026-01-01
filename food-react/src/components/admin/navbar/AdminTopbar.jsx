@@ -35,9 +35,17 @@ const AdminTopbar = () => {
   };
 
   const toggleSidebar = () => {
-    // Implement sidebar toggle logic if needed for mobile
-    document.querySelector('.admin-sidebar').classList.toggle('active');
-  };
+  const sidebar = document.querySelector('.admin-sidebar');
+  const main = document.querySelector('.admin-main');
+
+  sidebar.classList.toggle('active');
+
+  if (sidebar.classList.contains('active')) {
+    main.style.marginLeft = '250px';
+  } else {
+    main.style.marginLeft = '0';
+  }
+};
 
   return (
     <header className="admin-topbar">
