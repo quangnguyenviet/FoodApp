@@ -41,10 +41,12 @@ const ProcessPaymenttPage = () => {
             amount: amount
         });
 
+        const timeouts = timeoutRef.current;
+
         return () => {
-            timeoutRef.current.forEach(timeout => clearTimeout(timeout));
+            timeouts.forEach(timeout => clearTimeout(timeout));
         };
-    }, [searchParams])
+    }, [searchParams, showError]);
 
 
 
@@ -73,7 +75,6 @@ const ProcessPaymenttPage = () => {
         );
     }
 
-kljljk
     return (
         <div className="checkout-container">
             <ErrorDisplay />
