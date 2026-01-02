@@ -25,6 +25,7 @@ import AdminPaymentsPage from "./components/admin/AdminPaymentsPage";
 import AdminPaymentDetailPage from "./components/admin/AdminPaymentDetailPage";
 import AdminDashboardPage from "./components/admin/AdminDashboardPage";
 import AdminUserRegistration from "./components/auth/AdminUserRegistration/AdminUserRegistration";
+import OAuth2Callback from "./components/auth/OAuth2Callback";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           {/* AUTH PAGES */}
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/oauth2/callback" element={<OAuth2Callback />} />
 
           <Route path="/home" element={<HomePage />} />
           <Route path="/categories" element={<CategoriesPage />} />

@@ -43,6 +43,9 @@ const LoginPage = () => {
             showError(error.response?.data?.message || error.message);
         }
     };
+    const handleGoogleLogin = () => {
+        window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+    }
 
 
     return (
@@ -107,7 +110,8 @@ const LoginPage = () => {
 
                         <div className={styles.socialButtons}>
                             {/* Add social login buttons here (e.g., Google, Facebook, GitHub) */}
-                            <button className={`${styles.socialButton} ${styles.google}`}>Google</button>
+                            <button className={`${styles.socialButton} ${styles.google}`}
+                            onClick={handleGoogleLogin}>Google</button>
                             <button className={`${styles.socialButton} ${styles.facebook}`}>Facebook</button>
                             <button className={`${styles.socialButton} ${styles.github}`}>Github</button>
                         </div>

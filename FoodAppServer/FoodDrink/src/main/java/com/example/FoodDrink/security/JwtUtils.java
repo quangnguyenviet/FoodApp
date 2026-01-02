@@ -17,12 +17,13 @@ import java.util.Date;
 @Slf4j
 public class JwtUtils {
 
-
-    private static final long EXPIRATION_TIME = 30L * 24 * 60 * 60 * 1000; // 30 days in ms
     private SecretKey key;
 
     @Value("${secreteJwtString}")
     private String secreteJwtString;
+
+    @Value("${jwt.expiration.time}")
+    private Long EXPIRATION_TIME;
 
     @PostConstruct
     private void init() {

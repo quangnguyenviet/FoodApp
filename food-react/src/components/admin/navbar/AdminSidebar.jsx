@@ -1,8 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
 import {
-  faBars,
   faChartLine,
   faList,
   faUtensils,
