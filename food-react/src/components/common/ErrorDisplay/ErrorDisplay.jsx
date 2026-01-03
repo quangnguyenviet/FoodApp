@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styles from './ErrorDisplay.module.css';
 
 /**
@@ -43,9 +43,9 @@ export const useError = () => {
      * Shows an error message
      * @param {string} message - The error message to display
      */
-    const showError = (message) => {
+    const showError = useCallback((message) => {
         setErrorMessage(message);
-    };
+    }, []);
 
     /** Dismisses the current error message */
     const dismissError = () => {

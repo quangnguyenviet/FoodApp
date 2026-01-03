@@ -1,5 +1,6 @@
 package com.example.FoodDrink.entity;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,7 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    @NotBlank(message = "password is required")
+//    @NotBlank(message = "password is required")
     private String password;
 
     private String phoneNumber;
@@ -57,6 +58,9 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Cart cart;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private RefreshToken refreshToken;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

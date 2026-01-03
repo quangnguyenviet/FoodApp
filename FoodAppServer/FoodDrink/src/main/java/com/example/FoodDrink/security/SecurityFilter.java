@@ -27,6 +27,8 @@ public class SecurityFilter {
     private final AuthFilter authFilter;
     private final CustomAccessDenialHandler customAccessDenialHandler;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomOidcUserService customOidcUserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
 
     @Bean
@@ -37,10 +39,21 @@ public class SecurityFilter {
                         ex.accessDeniedHandler(customAccessDenialHandler).authenticationEntryPoint(customAuthenticationEntryPoint))
                 .authorizeHttpRequests(req ->
                         req.requestMatchers("/api/auth/**", "/api/categories/**", "/api/menu/**",
-                                        "/api/reviews/**").permitAll()
+                                        "/api/reviews/**",
+                                        "/oauth2/**"
+                                ).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(mag -> mag.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+                // Configure OAuth2 login
+                .oauth2Login(oauth2 -> oauth2
+                                .userInfoEndpoint(userInfo -> userInfo
+                                        // Use the custom OIDC user service to process user info
+                                        .oidcUserService(customOidcUserService)
+                                ).successHandler(oAuth2LoginSuccessHandler)
+                        // Redirect to the frontend after successful login (session-based)
+//                        .defaultSuccessUrl("http://localhost:5173", true)
+                );
 
         return httpSecurity.build();
     }
