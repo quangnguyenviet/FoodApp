@@ -10,14 +10,27 @@ const Navbar = () => {
     const navigate = useNavigate();
 
 
-    const handleLogout = () => {
+    // const handleLogout = () => {
+    //     const isLogout = window.confirm("Are you sure you want to logout?")
+    //     if (isLogout) {
+    //         // ApiService.logout();
+    //         // navigate("/login")
+
+    //     }
+    // }
+    const handleLogout = async () => {
         const isLogout = window.confirm("Are you sure you want to logout?")
         if (isLogout) {
-            ApiService.logout();
-            navigate("/login")
+            const response = await ApiService.logoutUser();
+            if(response.statusCode === 200){
+                console.log("Logout successful");
+                navigate("/login");
+            }
+            else{
+                console.error("Logout failed");
+            }
         }
     }
-
 
     return (
         <nav>
