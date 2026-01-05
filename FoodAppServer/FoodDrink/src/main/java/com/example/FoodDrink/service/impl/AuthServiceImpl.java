@@ -18,12 +18,14 @@ import com.example.FoodDrink.service.AuthService;
 import com.example.FoodDrink.service.RefreshTokenService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -129,34 +131,115 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
+//    @Override
+//    public Response<LoginResponse> refreshToken(HttpServletRequest request) {
+//        // 1. Get the cookie from the request
+//        String token = Arrays.stream(request.getCookies())
+//                .filter(cookie -> "refreshToken".equals(cookie.getName()))
+//                .map(Cookie::getValue)
+//                .findFirst()
+//                .orElseThrow(() -> new RuntimeException("Refresh token missing"));
+//
+//        // 2. Validate and find the user associated with this token
+//        return refreshTokenRepository.findByToken(token)
+//                .map(refreshTokenService::verifyExpiration) // Check if expired
+//                .map(RefreshToken::getUser)
+//                .map(user -> {
+//                    // 3. Generate a new JWT
+//                    String accessToken = jwtUtils.generateToken(user.getEmail());
+//                    List<String> roleNames = user.getRoles().stream()
+//                            .map(Role::getName)
+//                            .toList();
+//                    LoginResponse loginResponse = new LoginResponse();
+//                    loginResponse.setToken(accessToken);
+//                    loginResponse.setRoles(roleNames);
+//                    return Response.<LoginResponse>builder()
+//                            .statusCode(HttpStatus.OK.value())
+//                            .message("Token refreshed successfully")
+//                            .data(loginResponse)
+//                            .build();
+//                })
+//                .orElseThrow(() -> new RuntimeException("Refresh token is not in database!"));
+//    }
     @Override
     public Response<LoginResponse> refreshToken(HttpServletRequest request) {
-        // 1. Get the cookie from the request
-        String token = Arrays.stream(request.getCookies())
+        // 1. Get the refresh token from the request cookies
+        String refreshToken = getRefreshTokenFromCookies(request);
+
+        // 2. Find the refresh token in the database
+        RefreshToken tokenEntity = refreshTokenRepository.findByToken(refreshToken)
+                .orElseThrow(() -> new RuntimeException("Refresh token is not in database!"));
+
+        // 3. Verify that the token has not expired
+        refreshTokenService.verifyExpiration(tokenEntity);
+
+        // 4. Get the user associated with this refresh token
+        User user = tokenEntity.getUser();
+
+        // 5. Generate a new JWT access token
+        String newAccessToken = jwtUtils.generateToken(user.getEmail());
+
+        // 6. Get the user's roles
+        List<String> roleNames = user.getRoles().stream()
+                .map(Role::getName)
+                .toList();
+
+        // 7. Create the login response
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setToken(newAccessToken);
+        loginResponse.setRoles(roleNames);
+
+        // 8. Return the response
+        return Response.<LoginResponse>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Token refreshed successfully")
+                .data(loginResponse)
+                .build();
+    }
+
+    @Transactional
+    @Override
+    public Response<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        log.info("INSIDE logout()");
+        String refreshToken = getRefreshTokenFromCookies(request);
+
+        RefreshToken tokenEntity = refreshTokenRepository.findByToken(refreshToken)
+                .orElseThrow(() -> new RuntimeException("Refresh token is not in database!"));
+
+        // set the refresh token in user to null
+        User user = tokenEntity.getUser();
+        if (user != null) {
+            user.setRefreshToken(null);
+        }
+        refreshTokenRepository.delete(tokenEntity);
+
+        // delete cookie by setting max age to 0
+        Cookie cookie = new Cookie("refreshToken", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/api/auth");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return Response.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Logout successful")
+                .build();
+    }
+
+    /**
+     * Helper method to extract the refresh token from cookies
+     */
+    private String getRefreshTokenFromCookies(HttpServletRequest request) {
+        if (request.getCookies() == null) {
+            throw new RuntimeException("No cookies found in request");
+        }
+
+        return Arrays.stream(request.getCookies())
                 .filter(cookie -> "refreshToken".equals(cookie.getName()))
                 .map(Cookie::getValue)
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Refresh token missing"));
-
-        // 2. Validate and find the user associated with this token
-        return refreshTokenRepository.findByToken(token)
-                .map(refreshTokenService::verifyExpiration) // Check if expired
-                .map(RefreshToken::getUser)
-                .map(user -> {
-                    // 3. Generate a new JWT
-                    String accessToken = jwtUtils.generateToken(user.getEmail());
-                    List<String> roleNames = user.getRoles().stream()
-                            .map(Role::getName)
-                            .toList();
-                    LoginResponse loginResponse = new LoginResponse();
-                    loginResponse.setToken(accessToken);
-                    loginResponse.setRoles(roleNames);
-                    return Response.<LoginResponse>builder()
-                            .statusCode(HttpStatus.OK.value())
-                            .message("Token refreshed successfully")
-                            .data(loginResponse)
-                            .build();
-                })
-                .orElseThrow(() -> new RuntimeException("Refresh token is not in database!"));
     }
+
 }

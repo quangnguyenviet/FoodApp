@@ -67,12 +67,16 @@ export default class ApiService {
 
 
 
-
-
-
+    // Logout user
+    static async logoutUser() {
+        const resp = await axios.post(`${this.BASE_URL}/auth/logout`, {}, {
+            withCredentials: true
+        });
+        localStorage.removeItem("token");
+        localStorage.removeItem("roles");
+        return resp.data;
+    }
     
-
-
     // REGISTER USER
     static async registerUser(registrationData) {
         const resp = await axios.post(`${this.BASE_URL}/auth/register`, registrationData);
@@ -83,6 +87,13 @@ export default class ApiService {
     
     static async loginUser(loginData) {
         const resp = await axios.post(`${this.BASE_URL}/auth/login`, loginData);
+        return resp.data;
+    }
+
+    static async refreshToken() {
+        const resp = await axios.post(`${this.BASE_URL}/auth/refresh`, {}, {
+            withCredentials: true
+        });
         return resp.data;
     }
 

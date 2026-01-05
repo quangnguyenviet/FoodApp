@@ -42,7 +42,8 @@ const MenuPage = () => {
             }
         };
         fetchMenus();
-    }, [location.search, showError, menus]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location.search, showError]);
 
 
 

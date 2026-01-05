@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import ApiService from '../../services/ApiService';
 
 const OAuth2Callback = () => {
     const navigate = useNavigate();
@@ -11,10 +12,12 @@ const OAuth2Callback = () => {
             try {
                 // 1. Call your specific refresh endpoint
                 // IMPORTANT: 'withCredentials: true' allows the browser to send the HttpOnly cookie
-                const response = await axios.post('http://localhost:8080/api/auth/refresh', {}, {
-                    withCredentials: true 
-                });
-                console.log("Token exchange successful", response.data);
+                const response = await ApiService.refreshToken();
+                const data = response.data;
+                console.log("Token exchange successful", data);
+
+                ApiService.saveToken(data.token)
+                ApiService.saveRole(data.roles)
 
                 // 2. Extract the JWT (Access Token) from the response body
                 // const { accessToken } = response.data;
@@ -24,7 +27,7 @@ const OAuth2Callback = () => {
                 // saveTokenToAppState(accessToken); 
 
                 // 4. Redirect to the home page or dashboard
-                // navigate('/dashboard');
+                navigate('/home');
             } catch (err) {
                 console.error("Token exchange failed", err);
                 setError("Authentication failed. Please try again.");

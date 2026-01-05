@@ -1,5 +1,6 @@
 package com.example.FoodDrink.service.impl;
 
+import com.example.FoodDrink.dto.response.Response;
 import com.example.FoodDrink.entity.RefreshToken;
 import com.example.FoodDrink.entity.User;
 import com.example.FoodDrink.exceptions.NotFoundException;
@@ -8,9 +9,12 @@ import com.example.FoodDrink.repository.UserRepository;
 import com.example.FoodDrink.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -43,4 +47,29 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         }
         return refreshToken;
     }
+
+    @Override
+    @Transactional
+    public Response<?> deleteByToken(String id) {
+        RefreshToken refreshToken = refreshTokenRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Refresh token with id " + id + " not found")
+        );
+
+        // Break association with user
+        User user = refreshToken.getUser();
+        if (user != null) {
+            user.setRefreshToken(null);
+        }
+
+        // Now delete
+        refreshTokenRepository.delete(refreshToken);
+
+        return Response.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Refresh token deleted successfully")
+                .build();
+    }
+
+
+
 }
