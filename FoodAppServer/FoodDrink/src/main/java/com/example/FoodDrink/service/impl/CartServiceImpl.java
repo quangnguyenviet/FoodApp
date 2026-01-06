@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,6 +81,7 @@ public class CartServiceImpl implements CartService {
                     .menu(menu)
                     .quantity(quantity)
                     .pricePerUnit(menu.getPrice())
+                    .createdAt(Instant.now())
 //                    .subtotal(menu.getPrice().multiply(BigDecimal.valueOf(quantity)))
                     .build();
 
@@ -194,6 +197,11 @@ public class CartServiceImpl implements CartService {
         List<CartItem> cartItems = cart.getCartItems();
 
         CartDTO cartDTO = cartMapper.entityToDto(cart);
+
+        // sort item by createdAt desc
+        Collections.sort(cartDTO.getCartItems(), (o1, o2) -> {
+            return o2.getCreatedAt().compareTo(o1.getCreatedAt());
+        });
 
         // Calculate total amount
         BigDecimal totalAmount = BigDecimal.ZERO;

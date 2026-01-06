@@ -13,7 +13,7 @@ const OAuth2Callback = () => {
                 // IMPORTANT: 'withCredentials: true' allows the browser to send the HttpOnly cookie
                 const response = await ApiService.refreshToken();
                 const data = response.data;
-                console.log("Token exchange successful", data);
+                console.log("Token exchange successful");
 
                 ApiService.saveToken(data.token)
                 ApiService.saveRole(data.roles)
