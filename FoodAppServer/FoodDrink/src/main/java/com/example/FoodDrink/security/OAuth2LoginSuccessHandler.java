@@ -6,6 +6,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -17,6 +18,8 @@ import java.io.IOException;
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtUtils jwtUtils;
     private final RefreshTokenService refreshTokenService;
+    @Value("${cookie.refresh.token.max.age}")
+    private int refreshTokenCookieMaxAge;
 
     @Override
     public void onAuthenticationSuccess(
@@ -32,7 +35,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
         cookie.setPath("/api/auth");
-        cookie.setMaxAge(7 * 24 * 60 * 60);
+        cookie.setMaxAge(refreshTokenCookieMaxAge);
         response.addCookie(cookie);
 
         // Redirect to frontend with token as query parameter

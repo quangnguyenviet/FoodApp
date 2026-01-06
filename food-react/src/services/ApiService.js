@@ -1,4 +1,5 @@
 import axios from "axios";
+import api from "./Inceptor";
 
 export default class ApiService {
 
@@ -76,7 +77,7 @@ export default class ApiService {
         localStorage.removeItem("roles");
         return resp.data;
     }
-    
+
     // REGISTER USER
     static async registerUser(registrationData) {
         const resp = await axios.post(`${this.BASE_URL}/auth/register`, registrationData);
@@ -84,9 +85,11 @@ export default class ApiService {
     }
 
 
-    
+
     static async loginUser(loginData) {
-        const resp = await axios.post(`${this.BASE_URL}/auth/login`, loginData);
+        const resp = await axios.post(`${this.BASE_URL}/auth/login`, loginData, {
+            withCredentials: true
+        });
         return resp.data;
     }
 
@@ -107,17 +110,21 @@ export default class ApiService {
 
 
 
-     /**USERS PROFILE MANAGEMENT SESSION */
+    /**USERS PROFILE MANAGEMENT SESSION */
     static async myProfile() {
-        const resp = await axios.get(`${this.BASE_URL}/users/account`, {
+        const resp = await api.get("/users/account", {
             headers: this.getHeader()
-        })
+        });
+        console.log("myProfile response: ", resp.data)
+
         return resp.data;
     }
 
 
+
+
     static async updateProfile(formData) {
-        const resp = await axios.put(`${this.BASE_URL}/users/update`, formData, {
+        const resp = await api.put(`${this.BASE_URL}/users/update`, formData, {
             headers: {
                 ...this.getHeader(),
                 'Content-Type': 'multipart/form-data'
@@ -128,7 +135,7 @@ export default class ApiService {
 
 
     static async deactivateProfile() {
-        const resp = await axios.delete(`${this.BASE_URL}/users/deactivate`, {
+        const resp = await api.delete(`${this.BASE_URL}/users/deactivate`, {
             headers: this.getHeader()
         });
         return resp.data;
@@ -150,21 +157,21 @@ export default class ApiService {
     //ORDER SECTION
 
     static async placeOrder() {
-        const resp = await axios.post(`${this.BASE_URL}/orders/checkout`, {}, {
+        const resp = await api.post(`${this.BASE_URL}/orders/checkout`, {}, {
             headers: this.getHeader()
         })
         return resp.data;
     }
 
     static async initiateDelivery(body) {
-        const resp = await axios.post(`${this.BASE_URL}/orders/initiate-delivery`, body, {
+        const resp = await api.post(`${this.BASE_URL}/orders/initiate-delivery`, body, {
             headers: this.getHeader()
         })
         return resp.data;
     }
 
     static async updateOrderStatus(body) {
-        const resp = await axios.put(`${this.BASE_URL}/orders/update`, body, {
+        const resp = await api.put(`${this.BASE_URL}/orders/update`, body, {
             headers: this.getHeader()
         })
         return resp.data;
@@ -179,7 +186,7 @@ export default class ApiService {
             url = `${this.BASE_URL}/orders/all?orderStatus=${orderStatus}&page=${page}&size=${size}`
         }
 
-        const resp = await axios.get(url, {
+        const resp = await api.get(url, {
             headers: this.getHeader()
         })
         return resp.data;
@@ -188,7 +195,7 @@ export default class ApiService {
 
 
     static async getMyOrders() {
-        const resp = await axios.get(`${this.BASE_URL}/orders/me`, {
+        const resp = await api.get(`${this.BASE_URL}/orders/me`, {
             headers: this.getHeader()
         })
         return resp.data;
@@ -196,7 +203,7 @@ export default class ApiService {
 
 
     static async getOrderById(id) {
-        const resp = await axios.get(`${this.BASE_URL}/orders/${id}`, {
+        const resp = await api.get(`${this.BASE_URL}/orders/${id}`, {
             headers: this.getHeader()
         })
         return resp.data;
@@ -204,7 +211,7 @@ export default class ApiService {
 
 
     static async countTotalActiveCustomers() {
-        const resp = await axios.get(`${this.BASE_URL}/orders/unique-customers`, {
+        const resp = await api.get(`${this.BASE_URL}/orders/unique-customers`, {
             headers: this.getHeader()
         })
         return resp.data;
@@ -212,7 +219,7 @@ export default class ApiService {
 
 
     static async getOrderItemById(id) {
-        const resp = await axios.get(`${this.BASE_URL}/orders/order-item/${id}`, {
+        const resp = await api.get(`${this.BASE_URL}/orders/order-item/${id}`, {
             headers: this.getHeader()
         })
         return resp.data;
@@ -244,21 +251,21 @@ export default class ApiService {
     }
 
     static async createCategory(body) {
-        const resp = await axios.post(`${this.BASE_URL}/categories`, body, {
+        const resp = await api.post(`${this.BASE_URL}/categories`, body, {
             headers: this.getHeader()
         });
         return resp.data;
     }
 
     static async updateCategory(body) {
-        const resp = await axios.put(`${this.BASE_URL}/categories`, body, {
+        const resp = await api.put(`${this.BASE_URL}/categories`, body, {
             headers: this.getHeader()
         });
         return resp.data;
     }
 
     static async deleteCategory(id) {
-        const resp = await axios.delete(`${this.BASE_URL}/categories/${id}`, {
+        const resp = await api.delete(`${this.BASE_URL}/categories/${id}`, {
             headers: this.getHeader()
         });
         return resp.data;
@@ -277,7 +284,7 @@ export default class ApiService {
     /* MENU SECTION */
 
     static async addMenu(formData) {
-        const resp = await axios.post(`${this.BASE_URL}/menu`, formData, {
+        const resp = await api.post(`${this.BASE_URL}/menu`, formData, {
             headers: {
                 ...this.getHeader(),
                 'Content-Type': 'multipart/form-data'
@@ -287,7 +294,7 @@ export default class ApiService {
     }
 
     static async updateMenu(formData) {
-        const resp = await axios.put(`${this.BASE_URL}/menu`, formData, {
+        const resp = await api.put(`${this.BASE_URL}/menu`, formData, {
             headers: {
                 ...this.getHeader(),
                 'Content-Type': 'multipart/form-data'
@@ -297,7 +304,7 @@ export default class ApiService {
     }
 
     static async deleteMenu(id) {
-        const resp = await axios.delete(`${this.BASE_URL}/menu/${id}`, {
+        const resp = await api.delete(`${this.BASE_URL}/menu/${id}`, {
             headers: this.getHeader()
         });
         return resp.data;
@@ -343,42 +350,42 @@ export default class ApiService {
     /* CART SECTION */
     static async addItemToCart(cartDTO) {
 
-        const resp = await axios.post(`${this.BASE_URL}/cart/items`, cartDTO, {
+        const resp = await api.post(`${this.BASE_URL}/cart/items`, cartDTO, {
             headers: this.getHeader()
         });
         return resp.data;
     }
 
     static async incrementItem(menuId) {
-        const resp = await axios.put(`${this.BASE_URL}/cart/items/increment/${menuId}`, null, {
+        const resp = await api.put(`${this.BASE_URL}/cart/items/increment/${menuId}`, null, {
             headers: this.getHeader()
         });
         return resp.data;
     }
 
     static async decrementItem(menuId) {
-        const resp = await axios.put(`${this.BASE_URL}/cart/items/decrement/${menuId}`, null, {
+        const resp = await api.put(`${this.BASE_URL}/cart/items/decrement/${menuId}`, null, {
             headers: this.getHeader()
         });
         return resp.data;
     }
 
     static async removeItem(cartItemId) {
-        const resp = await axios.delete(`${this.BASE_URL}/cart/items/${cartItemId}`, {
+        const resp = await api.delete(`${this.BASE_URL}/cart/items/${cartItemId}`, {
             headers: this.getHeader()
         });
         return resp.data;
     }
 
     static async getCart() {
-        const resp = await axios.get(`${this.BASE_URL}/cart`, {
+        const resp = await api.get(`${this.BASE_URL}/cart`, {
             headers: this.getHeader()
         });
         return resp.data;
     }
 
     static async clearCart() {
-        const resp = await axios.delete(`${this.BASE_URL}/api/cart`, {
+        const resp = await api.delete(`${this.BASE_URL}/api/cart`, {
             headers: this.getHeader()
         });
         return resp.data;
@@ -397,12 +404,12 @@ export default class ApiService {
 
     /**REVIEW SECTION */
     static async getMenuAverageOverallReview(menuId) {
-        const resp = await axios.get(`${this.BASE_URL}/reviews/menu-item/average/${menuId}`);
+        const resp = await api.get(`${this.BASE_URL}/reviews/menu-item/average/${menuId}`);
         return resp.data;
     }
 
     static async createReview(body) {
-        const resp = await axios.post(`${this.BASE_URL}/reviews`, body, {
+        const resp = await api.post(`${this.BASE_URL}/reviews`, body, {
             headers: this.getHeader()
         });
         return resp.data;
@@ -428,7 +435,7 @@ export default class ApiService {
     static async proceedForPayment(body) {
 
 
-        const resp = await axios.post(`${this.BASE_URL}/payments/pay`, body, {
+        const resp = await api.post(`${this.BASE_URL}/payments/pay`, body, {
             headers: this.getHeader()
         });
         return resp.data; //return the resp containg the stripe transaction id for this transaction
@@ -436,21 +443,21 @@ export default class ApiService {
 
     //TO UPDATE PAYMENT WHEN IT HAS BEEN COMPLETED
     static async updateOrderPayment(body) {
-        const resp = await axios.put(`${this.BASE_URL}/payments/update`, body, {
+        const resp = await api.put(`${this.BASE_URL}/payments/update`, body, {
             headers: this.getHeader()
         });
         return resp.data;
     }
 
     static async getAllPayments() {
-        const resp = await axios.get(`${this.BASE_URL}/payments/all`, {
+        const resp = await api.get(`${this.BASE_URL}/payments/all`, {
             headers: this.getHeader()
         });
         return resp.data;
     }
 
     static async getAPaymentById(paymentId) {
-        const resp = await axios.get(`${this.BASE_URL}/payments/${paymentId}`, {
+        const resp = await api.get(`${this.BASE_URL}/payments/${paymentId}`, {
             headers: this.getHeader()
         });
         return resp.data;

@@ -21,7 +21,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,6 +45,12 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final RefreshTokenService refreshTokenService;
+
+    @Value("${isProduction}")
+    private boolean isProduction;
+
+    @Value("${cookie.refresh.token.max.age}")
+    private int refreshTokenCookieMaxAge;
 
 
     @Override
@@ -93,7 +102,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Response<LoginResponse> login(LoginRequest loginRequest) {
+    public Response<LoginResponse> login(LoginRequest loginRequest, HttpServletResponse response) {
 
         log.info("INSIDE login()");
 
@@ -112,6 +121,18 @@ public class AuthServiceImpl implements AuthService {
 
         // Generate a token
         String token = jwtUtils.generateToken(user.getEmail());
+        // Create a refresh token
+        RefreshToken refreshToken = refreshTokenService.create(user.getEmail());
+
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken.getToken())
+                .httpOnly(true)
+                .secure(true)              // REQUIRED when SameSite=None
+                .sameSite("None")          // REQUIRED for cross-origin
+                .path("/api/auth")
+                .maxAge(refreshTokenCookieMaxAge)
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
         // Extract role names as a list
         List<String> roleNames = user.getRoles().stream()
@@ -203,23 +224,25 @@ public class AuthServiceImpl implements AuthService {
         log.info("INSIDE logout()");
         String refreshToken = getRefreshTokenFromCookies(request);
 
-        RefreshToken tokenEntity = refreshTokenRepository.findByToken(refreshToken)
-                .orElseThrow(() -> new RuntimeException("Refresh token is not in database!"));
+        if (refreshToken != null) {
+            RefreshToken tokenEntity = refreshTokenRepository.findByToken(refreshToken)
+                    .orElseThrow(() -> new RuntimeException("Refresh token is not in database!"));
 
-        // set the refresh token in user to null
-        User user = tokenEntity.getUser();
-        if (user != null) {
-            user.setRefreshToken(null);
+            // set the refresh token in user to null
+            User user = tokenEntity.getUser();
+            if (user != null) {
+                user.setRefreshToken(null);
+            }
+            refreshTokenRepository.delete(tokenEntity);
+
+            // delete cookie by setting max age to 0
+            Cookie cookie = new Cookie("refreshToken", null);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(true);
+            cookie.setPath("/api/auth");
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
         }
-        refreshTokenRepository.delete(tokenEntity);
-
-        // delete cookie by setting max age to 0
-        Cookie cookie = new Cookie("refreshToken", null);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setPath("/api/auth");
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
 
         return Response.builder()
                 .statusCode(HttpStatus.OK.value())
@@ -234,12 +257,18 @@ public class AuthServiceImpl implements AuthService {
         if (request.getCookies() == null) {
             throw new RuntimeException("No cookies found in request");
         }
+        for (Cookie cookie : request.getCookies()) {
+            if ("refreshToken".equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        return null;
 
-        return Arrays.stream(request.getCookies())
-                .filter(cookie -> "refreshToken".equals(cookie.getName()))
-                .map(Cookie::getValue)
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Refresh token missing"));
+//        return Arrays.stream(request.getCookies())
+//                .filter(cookie -> "refreshToken".equals(cookie.getName()))
+//                .map(Cookie::getValue)
+//                .findFirst()
+//                .orElseThrow(() -> new RuntimeException("Refresh token missing"));
     }
 
 }

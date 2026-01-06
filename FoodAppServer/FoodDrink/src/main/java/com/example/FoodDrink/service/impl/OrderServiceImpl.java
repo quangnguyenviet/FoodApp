@@ -7,8 +7,10 @@ import com.example.FoodDrink.dto.OrderDTO;
 import com.example.FoodDrink.dto.OrderItemDTO;
 import com.example.FoodDrink.dto.response.Response;
 import com.example.FoodDrink.entity.*;
+import com.example.FoodDrink.enums.ErrorCode;
 import com.example.FoodDrink.enums.OrderStatus;
 import com.example.FoodDrink.enums.PaymentStatus;
+import com.example.FoodDrink.exceptions.AppException;
 import com.example.FoodDrink.exceptions.BadRequestException;
 import com.example.FoodDrink.exceptions.NotFoundException;
 import com.example.FoodDrink.mapper.OrderItemMapper;
@@ -71,11 +73,13 @@ public class OrderServiceImpl  implements OrderService {
         log.info("user passed");
 
         String deliveryAddress = customer.getAddress();
+        String phoneNumber = customer.getPhoneNumber();
 
         log.info("deliveryAddress passed");
 
-        if (deliveryAddress == null) {
-            throw new NotFoundException("Delivery Address Not present for the user");
+        if (deliveryAddress == null || deliveryAddress.isEmpty() ||
+                phoneNumber == null || phoneNumber.isEmpty()) {
+            throw new AppException(ErrorCode.MISSING_CONTACT_INFORMATION);
         }
         Cart cart = cartRepository.findByUser_Id(customer.getId())
                 .orElseThrow(()-> new NotFoundException("Cart not found for the user" ));

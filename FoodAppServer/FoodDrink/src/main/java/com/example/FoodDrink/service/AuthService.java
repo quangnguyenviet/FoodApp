@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface AuthService {
     Response<?> register(RegistrationRequest registrationRequest);
-    Response<LoginResponse> login(LoginRequest loginRequest);
+    Response<LoginResponse> login(LoginRequest loginRequest, HttpServletResponse response);
     Response<LoginResponse> refreshToken(HttpServletRequest request);
     Response<?> logout(HttpServletRequest request, HttpServletResponse response);
 }

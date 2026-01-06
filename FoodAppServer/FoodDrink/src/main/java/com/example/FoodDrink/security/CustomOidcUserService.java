@@ -16,7 +16,9 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -57,6 +59,8 @@ public class CustomOidcUserService implements OAuth2UserService<OidcUserRequest,
                     .email(email)
                     .password("")
                     .profileUrl(oidcUser.getAttribute("picture"))
+                    .createdAt(LocalDateTime.now())
+                    .active(true)
                     .roles(roles
                     ) // Mặc định gán vai trò CUSTOMER
                     .build();
