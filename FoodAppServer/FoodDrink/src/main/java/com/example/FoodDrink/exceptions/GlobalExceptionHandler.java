@@ -73,4 +73,14 @@ public class GlobalExceptionHandler {
         return  new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(AppException.class)
+    public ResponseEntity<Response<?>> handleAppException(AppException ex){
+
+        Response<?> response = Response.builder()
+                .statusCode(ex.getErrorCode().getStatusCode())
+                .message(ex.getMessage())
+                .build();
+        return  new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }
