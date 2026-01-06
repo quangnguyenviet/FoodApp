@@ -1,0 +1,15 @@
+:root {
+  /* Main Colors */
+  --color-primary: #2d3436;    /* Deepest Gray (Elegance) */
+  --color-secondary: #d63031;  /* Classic Bistro Red (For focus) */
+  --color-adminUI: #4b4b4b;    /* Medium Gray */
+  
+  /* Status Colors */
+  --color-error: #c0392b;      /* Blood Red */
+  --color-success: #27ae60;    /* Emerald Green */
+  
+  /* Neutrals */
+  --color-background: #ffffff; /* Pure White */
+  --color-text: #1a1a1a;       /* High Contrast Black */
+  --color-card: #f9f9f9;       /* Ultra-light gray border/fill */
+}

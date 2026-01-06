@@ -229,10 +229,10 @@ public class AuthServiceImpl implements AuthService {
                     .orElseThrow(() -> new RuntimeException("Refresh token is not in database!"));
 
             // set the refresh token in user to null
-            User user = tokenEntity.getUser();
-            if (user != null) {
-                user.setRefreshToken(null);
-            }
+//            User user = tokenEntity.getUser();
+//            if (user != null) {
+//                user.setRefreshToken(null);
+//            }
             refreshTokenRepository.delete(tokenEntity);
 
             // delete cookie by setting max age to 0

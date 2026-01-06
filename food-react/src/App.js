@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import './styles/minimalTheme.css';
 import Navbar from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
 import RegisterPage from "./components/auth/RegisterPage/RegisterPage";

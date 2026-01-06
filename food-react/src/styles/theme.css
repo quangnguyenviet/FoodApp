@@ -1,0 +1,9 @@
+:root {
+  --color-primary: #ff6600;
+  --color-secondary: #e63946;
+  --color-adminUI: #2c3e50;
+  --color-error: #d32f2f;
+  --color-success: #2e7d32; /*# forest screen*/
+  --color-background: #f4f4f4;
+  /* --color-text: #222222; */
+}

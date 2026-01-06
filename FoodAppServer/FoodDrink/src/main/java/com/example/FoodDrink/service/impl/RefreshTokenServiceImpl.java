@@ -56,10 +56,10 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         );
 
         // Break association with user
-        User user = refreshToken.getUser();
-        if (user != null) {
-            user.setRefreshToken(null);
-        }
+//        User user = refreshToken.getUser();
+//        if (user != null) {
+//            user.setRefreshToken(null);
+//        }
 
         // Now delete
         refreshTokenRepository.delete(refreshToken);

@@ -1,0 +1,15 @@
+:root {
+  /* Main Colors */
+  --color-primary: #6c5ce7;    /* Electric Purple (Modern/Premium) */
+  --color-secondary: #00d2d3;  /* Vibrant Teal (Action accents) */
+  --color-adminUI: #0f0f0f;    /* Pure Onyx Black */
+  
+  /* Status Colors */
+  --color-error: #ff7675;      /* Pastel Red */
+  --color-success: #55efc4;    /* Mint Green */
+  
+  /* Neutrals */
+  --color-background: #121212; /* Deep Dark Background */
+  --color-text: #f5f6fa;       /* Off-White Text */
+  --color-card: #1e1e1e;       /* Slightly lighter gray for cards */
+}
