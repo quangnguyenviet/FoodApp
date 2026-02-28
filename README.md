@@ -21,14 +21,24 @@
 #### Dashboard
 *Dashboard quản lý với thống kê đơn hàng, doanh thu và số lượng khách hàng*
 
+![Admin Dashboard](./demoImages/admin/dashboard.png)
+
 #### Quản Lý Menu
 *Tạo, chỉnh sửa và xóa các món ăn, quản lý giá cả và tính khả dụng*
+
+![Admin Add Menu](./demoImages/admin/add_menu.png)
+![Admin Manage Menu](./demoImages/admin/manage_menu.png)
 
 #### Quản Lý Đơn Hàng
 *Theo dõi các đơn hàng mới, xử lý và cập nhật trạng thái giao hàng*
 
+![Admin Manage Order](./demoImages/admin/manage_order.png)
+
 #### Thống Kê Bán Hàng
 *Xem báo cáo chi tiết về doanh thu, sản phẩm bán chạy và khách hàng*
+
+![Admin Add Category](./demoImages/admin/add_category.png)
+![Admin Manage Category](./demoImages/admin/manage_category.png)
 
 ---
 
@@ -37,17 +47,30 @@
 #### Trang Chủ
 *Khám phá danh sách các nhà hàng và xu hướng món ăn*
 
+![Customer Home](./demoImages/customer/home.png)
+
 #### Danh Sách Nhà Hàng
 *Tìm kiếm nhà hàng theo danh mục, đánh giá và khoảng cách*
+
+![Customer Menu](./demoImages/customer/menu.png)
 
 #### Menu Chi Tiết
 *Xem menu đầy đủ của nhà hàng, tùy chỉnh đơn hàng*
 
+![Customer Menu Detail](./demoImages/customer/menu_detail.png)
+
 #### Giỏ Hàng & Thanh Toán
 *Quản lý giỏ hàng, áp dụng mã giảm giá và thanh toán an toàn*
 
+![Customer Cart](./demoImages/customer/cart.png)
+![Customer Login](./demoImages/customer/login.png)
+![Customer Email Confirm](./demoImages/customer/send_enmail_to_confirm.png)
+
 #### Lịch Sử Đơn Hàng
 *Theo dõi các đơn hàng đã đặt, xem chi tiết và đánh giá*
+
+![Customer Manage Order](./demoImages/customer/manage_order.png)
+![Customer Profile](./demoImages/customer/profile.png)
 
 ---
 
