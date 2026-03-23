@@ -196,7 +196,19 @@ FoodApp/
    cd FoodAppServer
    ```
 
-2. **Cấu hình hệ thống** trong `src/main/resources/application.properties`:
+2. **Tạo file môi trường từ mẫu** (`.env.example` → `.env`):
+   - Linux/macOS/Git Bash:
+   ```bash
+   cp .env.example .env
+   ```
+   - Windows CMD:
+   ```cmd
+   copy .env.example .env
+   ```
+
+3. **Cập nhật giá trị thực** trong file `.env` (JWT, Mail, AWS, Stripe, Google OAuth).
+
+4. **Cấu hình database** trong `src/main/resources/application.properties`:
    ```properties
    spring.datasource.url=jdbc:postgresql://localhost:5432/food_app
    spring.datasource.username=your_username
@@ -204,22 +216,7 @@ FoodApp/
    spring.jpa.hibernate.ddl-auto=update
    ```
 
-3. **Thiết lập biến môi trường bắt buộc** (JWT, Mail, AWS, Stripe, Google OAuth):
-   ```env
-   secreteJwtString=your_jwt_secret
-   myGmail=your_gmail@gmail.com
-   myGmailPassword=your_gmail_app_password
-   AWS_REGION=ap-southeast-1
-   S3_BUCKET_NAME=your_bucket_name
-   AWS_ACCESS_KEY_ID=your_access_key
-   AWS_SECRET_ACCESS_KEY=your_secret_key
-   STRIPE_PUBLISHABLE_KEY=pk_test_xxx
-   STRIPE_SECRET_KEY=sk_test_xxx
-   GOOGLE_CLIENT_ID=your_google_client_id
-   GOOGLE_CLIENT_SECRET=your_google_client_secret
-   ```
-
-4. **Cài đặt dependencies và chạy:**
+5. **Cài đặt dependencies và chạy:**
    ```bash
    mvn clean install
    mvn spring-boot:run
@@ -234,12 +231,28 @@ FoodApp/
    cd FooAppClient
    ```
 
-2. **Cài đặt dependencies:**
+2. **Tạo file môi trường từ mẫu** (`.env.example` → `.env`):
+   - Linux/macOS/Git Bash:
+   ```bash
+   cp .env.example .env
+   ```
+   - Windows CMD:
+   ```cmd
+   copy .env.example .env
+   ```
+
+3. **Cập nhật biến môi trường frontend** trong `.env`:
+   ```env
+   REACT_APP_STRIPE_API_KEY=put_your_stripe_api_key_here
+   REACT_APP_BASE_URL=http://localhost:8080/api
+   ```
+
+4. **Cài đặt dependencies:**
    ```bash
    npm install
    ```
 
-3. **Chạy ứng dụng:**
+5. **Chạy ứng dụng:**
    ```bash
    npm start
    ```
@@ -251,7 +264,7 @@ FoodApp/
 #### Stripe (nếu sử dụng)
 1. Đăng ký tài khoản tại [stripe.com](https://stripe.com)
 2. Lấy Public Key và Secret Key
-3. Cấu hình trong backend `application.yml`
+3. Cấu hình trong backend `.env` và frontend `.env`
 
 #### VNPay (nếu sử dụng)
 1. Đăng ký tài khoản merchant tại VNPay
