@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>FoodDrink</artifactId>
+	<artifactId>FoodApp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>FoodDrink</name>
+	<name>FoodApp</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
@@ -141,7 +141,20 @@
 <!--            <groupId>org.springframework.boot</groupId>-->
 <!--            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>-->
 <!--        </dependency>-->
-	</dependencies>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.8.16</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+            <version>2.8.16</version>
+        </dependency>
+
+    </dependencies>
 
 	<build>
 		<plugins>

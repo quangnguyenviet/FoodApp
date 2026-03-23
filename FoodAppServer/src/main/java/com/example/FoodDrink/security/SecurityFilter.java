@@ -40,7 +40,8 @@ public class SecurityFilter {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers("/api/auth/**", "/api/categories/**", "/api/menu/**",
                                         "/api/reviews/**",
-                                        "/oauth2/**"
+                                        "/oauth2/**",
+                                "/swagger-ui/**", "/v3/api-docs/**"
                                 ).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(mag -> mag.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

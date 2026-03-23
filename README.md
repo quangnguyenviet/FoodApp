@@ -134,37 +134,43 @@
 
 ```
 FoodApp/
-├── FoodAppServer/
-│   └── FoodDrink/                   # Spring Boot Backend
-│       ├── src/
-│       │   └── main/
-│       │       ├── java/
-│       │       │   └── com/example/
-│       │       │       ├── controller/
-│       │       │       ├── service/
-│       │       │       ├── repository/
-│       │       │       ├── model/
-│       │       │       ├── config/
-│       │       │       └── utils/
-│       │       └── resources/
-│       ├── pom.xml
-│       └── README.md
-│
-├── food-react/                      # React Frontend
+├── README.md
+├── demoImages/
+│   ├── admin/
+│   └── customer/
+├── FooAppClient/                      # React Frontend
+│   ├── public/
 │   ├── src/
 │   │   ├── components/
-│   │   ├── pages/
+│   │   │   ├── admin/
+│   │   │   ├── auth/
+│   │   │   ├── common/
+│   │   │   ├── home_menu/
+│   │   │   ├── payment/
+│   │   │   └── profile_cart/
 │   │   ├── services/
 │   │   ├── styles/
 │   │   ├── App.js
 │   │   └── index.js
-│   ├── public/
-│   ├── package.json
-│   └── README.md
-│
-├── FoodAppClient/                   # Client liên quan (nếu có)
-│
-└── README.md                        # File này
+│   └── package.json
+└── FoodAppServer/                     # Spring Boot Backend
+   ├── src/
+   │   ├── main/
+   │   │   ├── java/com/example/FoodDrink/
+   │   │   │   ├── config/
+   │   │   │   ├── controller/
+   │   │   │   ├── dto/
+   │   │   │   ├── entity/
+   │   │   │   ├── exceptions/
+   │   │   │   ├── mapper/
+   │   │   │   ├── repository/
+   │   │   │   ├── security/
+   │   │   │   └── service/
+   │   │   └── resources/
+   │   │       ├── application.properties
+   │   │       └── templates/
+   │   └── test/
+   └── pom.xml
 ```
 
 ---
@@ -187,22 +193,33 @@ FoodApp/
 
 1. **Điều hướng đến thư mục backend:**
    ```bash
-   cd FoodAppServer/FoodDrink
+   cd FoodAppServer
    ```
 
-2. **Cấu hình cơ sở dữ liệu** trong `src/main/resources/application.yml`:
-   ```yaml
-   spring:
-     datasource:
-       url: jdbc:mysql://localhost:3306/foodapp
-       username: root
-       password: your_password
-     jpa:
-       hibernate:
-         ddl-auto: update
+2. **Cấu hình hệ thống** trong `src/main/resources/application.properties`:
+   ```properties
+   spring.datasource.url=jdbc:postgresql://localhost:5432/food_app
+   spring.datasource.username=your_username
+   spring.datasource.password=your_password
+   spring.jpa.hibernate.ddl-auto=update
    ```
 
-3. **Cài đặt dependencies và chạy:**
+3. **Thiết lập biến môi trường bắt buộc** (JWT, Mail, AWS, Stripe, Google OAuth):
+   ```env
+   secreteJwtString=your_jwt_secret
+   myGmail=your_gmail@gmail.com
+   myGmailPassword=your_gmail_app_password
+   AWS_REGION=ap-southeast-1
+   S3_BUCKET_NAME=your_bucket_name
+   AWS_ACCESS_KEY_ID=your_access_key
+   AWS_SECRET_ACCESS_KEY=your_secret_key
+   STRIPE_PUBLISHABLE_KEY=pk_test_xxx
+   STRIPE_SECRET_KEY=sk_test_xxx
+   GOOGLE_CLIENT_ID=your_google_client_id
+   GOOGLE_CLIENT_SECRET=your_google_client_secret
+   ```
+
+4. **Cài đặt dependencies và chạy:**
    ```bash
    mvn clean install
    mvn spring-boot:run
@@ -214,7 +231,7 @@ FoodApp/
 
 1. **Điều hướng đến thư mục frontend:**
    ```bash
-   cd food-react
+   cd FooAppClient
    ```
 
 2. **Cài đặt dependencies:**
@@ -222,13 +239,7 @@ FoodApp/
    npm install
    ```
 
-3. **Tạo file `.env` (nếu cần):**
-   ```env
-   REACT_APP_API_URL=http://localhost:8080
-   REACT_APP_STRIPE_KEY=your_stripe_public_key
-   ```
-
-4. **Chạy ứng dụng:**
+3. **Chạy ứng dụng:**
    ```bash
    npm start
    ```

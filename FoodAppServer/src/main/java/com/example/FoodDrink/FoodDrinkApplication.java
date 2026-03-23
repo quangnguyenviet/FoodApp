@@ -8,10 +8,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @EnableAsync
 @RequiredArgsConstructor
-public class MilkTeaAppApplication {
+public class FoodDrinkApplication {
 //    private final NotificationService notificationService;
 	public static void main(String[] args) {
-		SpringApplication.run(MilkTeaAppApplication.class, args);
+		SpringApplication.run(FoodDrinkApplication.class, args);
 	}
 
 //    @Bean
