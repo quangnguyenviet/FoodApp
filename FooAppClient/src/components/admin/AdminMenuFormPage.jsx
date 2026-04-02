@@ -44,6 +44,7 @@ const AdminMenuFormPage = () => {
         async () => {
             try {
                 const response = await ApiService.getMenuById(id);
+                console.log("FETCHED MENU: ", response);
                 if (response.statusCode === 200) {
                     setMenu({
                         ...response.data,
