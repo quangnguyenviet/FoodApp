@@ -4,6 +4,7 @@ import com.example.FoodDrink.service.AWSS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -16,6 +17,7 @@ import java.net.URL;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "storage.provider", havingValue = "aws", matchIfMissing = true)
 public class AWSS3ServiceImpl implements AWSS3Service {
 
     private final S3Client s3Client;

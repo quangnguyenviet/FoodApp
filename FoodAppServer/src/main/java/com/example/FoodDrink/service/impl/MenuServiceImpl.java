@@ -137,6 +137,7 @@ public class MenuServiceImpl implements MenuService {
                 .orElseThrow(() -> new NotFoundException("Menu not found"));
 
         MenuDTO menuDTO = menuMapper.entityToDto(menu);
+        menuDTO.setCategoryId(menu.getCategory().getId());
 
         // Sort the reviews by id in descending order
         if (menuDTO.getReviews() != null) {
